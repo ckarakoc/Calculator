@@ -18,13 +18,12 @@ public class View extends Application {
 
 	private Button one, two, three, four, five, six, seven, eight, nine, zero, plus, min, keer, delen, comma, equals,
 			percent, wortel;
-	private boolean add, substract, multiply, divide;
+	private boolean add, subtract, multiply, divide;
 	public Rectangle screen;
 	static TextField txt;
 	TextField txt2;
 
-	private long x, y;
-	private static String number = "", answer = "";
+	private static String number = "";
 	private ArrayList<String> numbers = new ArrayList<String>();
 
 	@Override
@@ -93,6 +92,7 @@ public class View extends Application {
 		keer.setOnAction((e -> Controller.processOperator(e)));
 		delen.setOnAction((e -> Controller.processOperator(e)));
 		equals.setOnAction(e -> Controller.processOperator(e));
+
 
 		// setting the sizes of the buttons
 		one.setPrefSize(100, 100);
