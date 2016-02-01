@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -6,10 +5,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -19,12 +19,11 @@ public class View extends Application {
     private Button one, two, three, four, five, six, seven, eight, nine, zero, plus, min, keer, delen, comma, equals,
             percent, wortel;
     private StackPane stack;
-    private boolean add, subtract, multiply, divide;
+    private Scene scene;
+    private static TextField txt;
+    private static TextField txt2;
+
     public Rectangle screen;
-
-    static TextField txt;
-    static TextField txt2;
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -55,13 +54,10 @@ public class View extends Application {
         // GridPane-coordinates
         generateConstraints();
 
-        // Setting up scene
-        Scene scene = new Scene(grid);
-
         // #CSS
         scene.getStylesheets().add("stylesheets/default.css");
 
-        // overriding the sizes of special buttons buttons
+        // Overriding the sizes of special buttons buttons
         zero.setStyle("-fx-pref-width: " + Double.toString(200 + grid.getHgap()));
         equals.setStyle("-fx-pref-height: " + Double.toString(200 + grid.getVgap()));
 
@@ -74,6 +70,9 @@ public class View extends Application {
         txt2.setFont(Font.font(30));
         txt2.setEditable(false);
 
+        // KeyEvents
+        generateKeyEvents();
+
         // style of nodes
         grid.setAlignment(Pos.CENTER);
         grid.getChildren().addAll(one, two, three, four, five, six, seven, eight, nine, zero, plus, min, keer, delen,
@@ -84,8 +83,60 @@ public class View extends Application {
         primaryStage.show();
     }
 
-
-
+    public void generateKeyEvents(){
+        scene.setOnKeyPressed(KeyEvent -> {
+            switch (KeyEvent.getCode()){
+                case DIGIT0:
+                    zero.fire();
+                    break;
+                case DIGIT1:
+                    one.fire();
+                    break;
+                case DIGIT2:
+                    two.fire();
+                    break;
+                case DIGIT3:
+                    three.fire();
+                    break;
+                case DIGIT4:
+                    four.fire();
+                    break;
+                case DIGIT5:
+                    five.fire();
+                    break;
+                case DIGIT6:
+                    six.fire();
+                    break;
+                case DIGIT7:
+                    seven.fire();
+                    break;
+                case DIGIT8:
+                    eight.fire();
+                    break;
+                case DIGIT9:
+                    nine.fire();
+                    break;
+                case PLUS:
+                    plus.fire();
+                    break;
+                case MINUS:
+                    min.fire();
+                    break;
+                case SLASH:
+                    delen.fire();
+                    break;
+                case MULTIPLY:
+                    keer.fire();
+                    break;
+                case EQUALS:
+                case ENTER:
+                    equals.fire();
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
 
     public void generateButtons() {
         // Buttons for numbers
