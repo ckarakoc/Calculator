@@ -1,0 +1,9 @@
+.button{
+    -fx-background-radius: 3,2,1;
+    -fx-pref-width: 100px;
+    -fx-pref-height: 100px;
+}
+
+.text-area *.text{
+    -fx-font-style: italic;
+}
