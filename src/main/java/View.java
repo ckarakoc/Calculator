@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
@@ -37,13 +38,13 @@ public class View extends Application {
 
         screen = new Rectangle(500 + grid.getHgap() * 4, 200 + grid.getVgap() * 3);
 
-        Model model = new Model();
-
         txt = new TextField();
         txt2 = new TextField();
 
         stack.getChildren().addAll(screen, txt, txt2);
         stack.setAlignment(Pos.BOTTOM_RIGHT);
+
+        scene = new Scene(grid);
 
         // Buttons
         generateButtons();
@@ -83,9 +84,9 @@ public class View extends Application {
         primaryStage.show();
     }
 
-    public void generateKeyEvents(){
+    public void generateKeyEvents() {
         scene.setOnKeyPressed(KeyEvent -> {
-            switch (KeyEvent.getCode()){
+            switch (KeyEvent.getCode()) {
                 case DIGIT0:
                     zero.fire();
                     break;
@@ -111,7 +112,10 @@ public class View extends Application {
                     seven.fire();
                     break;
                 case DIGIT8:
-                    eight.fire();
+                    if (KeyEvent.isShiftDown())
+                        keer.fire();
+                    else
+                        eight.fire();
                     break;
                 case DIGIT9:
                     nine.fire();
@@ -130,7 +134,10 @@ public class View extends Application {
                     break;
                 case EQUALS:
                 case ENTER:
-                    equals.fire();
+                    if (KeyEvent.isShiftDown())
+                        plus.fire();
+                    else
+                        equals.fire();
                     break;
                 default:
                     break;
@@ -213,6 +220,10 @@ public class View extends Application {
         equals.setOnAction(e -> Controller.processOperator(e));
     }
 
+    public static void main(String[] args){
+        launch(args);
+    }
+
     // Getters and setters
     public static TextField getTxt() {
         return txt;
@@ -221,4 +232,6 @@ public class View extends Application {
     public static TextField getTxt2() {
         return txt2;
     }
+
+
 }
