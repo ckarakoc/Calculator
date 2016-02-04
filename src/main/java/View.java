@@ -218,6 +218,8 @@ public class View extends Application {
         keer.setOnAction((e -> Controller.processOperator(e)));
         delen.setOnAction((e -> Controller.processOperator(e)));
         equals.setOnAction(e -> Controller.processOperator(e));
+
+        comma.setOnAction(e -> Controller.processComma());
     }
 
     public static void main(String[] args){

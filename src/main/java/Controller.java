@@ -8,10 +8,12 @@ public class Controller {
     private static String number = "";
     private static String previousNumber = "0";
     private static ArrayList<String> numbers = new ArrayList<String>();
+    private static boolean commaAlreadyUsed;
 
     /**
      * Gets the string {@code value} from withing the button (i.e. '+', '-', etc.).
      * Stores those values inside {@code number} and appends the {@code value} to the view.
+     *
      * @param event
      */
     public static void processNumpad(ActionEvent event) {
@@ -26,6 +28,7 @@ public class Controller {
 
     /**
      * The process of each operator (.i.e. '+', '-', '*', etc.) represented by {@code value}.
+     *
      * @param event
      */
     public static void processOperator(ActionEvent event) {
@@ -50,9 +53,19 @@ public class Controller {
         }
     }
 
+    public static void processComma() {
+        if (!number.equals("") && !commaAlreadyUsed) {
+            number += ".";
+            commaAlreadyUsed = true;
+
+            View.getTxt().appendText(".");
+        }
+    }
+
     /**
      * The {@code number} and the {@code value} is stored within an ArrayList.
      * After that the {@code number} is set to an empty string.
+     *
      * @param value
      */
     private static void calculateOperators(String value) {
@@ -62,13 +75,14 @@ public class Controller {
             number = "";
             System.out.println("[INFO] The current state of the ArrayList: " + numbers);
 
+            commaAlreadyUsed = false;
             View.getTxt().appendText(" " + value + " ");
         } else {
             numbers.add(previousNumber);
             numbers.add(value);
             System.out.println("[INFO] The current state of the ArrayList: " + numbers);
 
-            if(numbers.size() == 2)
+            if (numbers.size() == 2)
                 View.getTxt().appendText(previousNumber + " " + value + " ");
         }
     }
@@ -79,6 +93,7 @@ public class Controller {
         if (!number.equals("")) {
             numbers.add(number);
             number = "";
+            commaAlreadyUsed = false;
             System.out.println("[INFO] The current state of the ArrayList: " + numbers);
 
             String operator;
