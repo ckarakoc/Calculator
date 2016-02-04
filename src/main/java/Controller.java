@@ -9,6 +9,7 @@ public class Controller {
     private static String previousNumber = "0";
     private static ArrayList<String> numbers = new ArrayList<String>();
     private static boolean commaAlreadyUsed;
+    private static double answer = 0;
 
     /**
      * Gets the string {@code value} from withing the button (i.e. '+', '-', etc.).
@@ -53,6 +54,7 @@ public class Controller {
         }
     }
 
+
     public static void processComma() {
         if (!number.equals("") && !commaAlreadyUsed) {
             number += ".";
@@ -77,13 +79,13 @@ public class Controller {
 
             commaAlreadyUsed = false;
             View.getTxt().appendText(" " + value + " ");
-        } else {
+        } else if (!value.matches("x") && !value.matches("/")) { //TODO MAKE THIS BETTER!
+//            if (numbers.size() == 2) {
             numbers.add(previousNumber);
             numbers.add(value);
             System.out.println("[INFO] The current state of the ArrayList: " + numbers);
-
-            if (numbers.size() == 2)
-                View.getTxt().appendText(previousNumber + " " + value + " ");
+            View.getTxt().appendText(previousNumber + " " + value + " ");
+//            }
         }
     }
 
@@ -96,39 +98,71 @@ public class Controller {
             commaAlreadyUsed = false;
             System.out.println("[INFO] The current state of the ArrayList: " + numbers);
 
-            String operator;
-            double number1, number2, answer = 0;
-            for (int i = 0; i + 2 < numbers.size(); i++) { // i+2: we skip the last two: so no OutOfBoundsException
-                if ((i & 1) == 0) { // even [i, i+1, i+2]
-                    number1 = Double.parseDouble(numbers.get(i));
-                    operator = numbers.get(i + 1);
-                    number2 = Double.parseDouble(numbers.get(i + 2));
+            // x and / come before + and -
+            calculationMulDiv();
+            calculationSubAdd();
 
-                    switch (operator) {
-                        case "+":
-                            answer = number1 + number2;
-                            numbers.set(i + 2, Double.toString(answer));
-                            break;
-                        case "-":
-                            answer = number1 - number2;
-                            numbers.set(i + 2, Double.toString(answer));
-                            break;
-                        case "/":
-                            answer = number1 / number2;
-                            numbers.set(i + 2, Double.toString(answer));
-                            break;
-                        case "x":
-                            answer = number1 * number2;
-                            numbers.set(i + 2, Double.toString(answer));
-                            break;
-                    }
-                }
-            }
             System.out.println("[INFO] The answer to the equation is: " + answer + "\n");
             View.getTxt2().setText(Double.toString(answer));
             previousNumber = Double.toString(answer);
             numbers.clear();
             View.getTxt().clear();
         }
+    }
+
+    private static void calculationMulDiv() {
+        String operator;
+        double number1, number2;
+        for (int i = 0; i + 1 < numbers.size(); i++) {
+            if (!((i & 1) == 0)) {
+                operator = numbers.get(i);
+                switch (operator) {
+                    case "x":
+                        number1 = Double.parseDouble(numbers.get(i - 1)); // number before the x
+                        number2 = Double.parseDouble(numbers.get(i + 1)); // number after the x
+                        answer = number1 * number2;
+                        numbers.set(i - 1, Double.toString(answer)); // storing the answer in [i-1]
+                        numbers.remove(i);
+                        numbers.remove(i); //removing the empty spaces in the arraylist
+                        break;
+                    case "/":
+                        number1 = Double.parseDouble(numbers.get(i - 1)); // number before the x
+                        number2 = Double.parseDouble(numbers.get(i + 1)); // number after the x
+                        answer = number1 / number2;
+                        numbers.set(i - 1, Double.toString(answer)); // storing the answer in [i-1]
+                        numbers.remove(i);
+                        numbers.remove(i); //removing the empty spaces in the arraylist
+                        break;
+                }
+            }
+        }
+    }
+
+    private static void calculationSubAdd() {
+        String operator;
+        double number1, number2;
+        for (int i = 0; i + 2 < numbers.size(); i++) { // i+2: we skip the last two: so no OutOfBoundsException
+            if ((i & 1) == 0) { // even [i, i+1, i+2]
+                number1 = Double.parseDouble(numbers.get(i));
+                operator = numbers.get(i + 1);
+                number2 = Double.parseDouble(numbers.get(i + 2));
+
+                switch (operator) {
+                    case "+":
+                        answer = number1 + number2;
+                        numbers.set(i + 2, Double.toString(answer));
+                        break;
+                    case "-":
+                        answer = number1 - number2;
+                        numbers.set(i + 2, Double.toString(answer));
+                        break;
+                }
+            }
+        }
+    }
+
+    //getter and setters
+    public static ArrayList<String> getNumbers(){
+        return numbers;
     }
 }

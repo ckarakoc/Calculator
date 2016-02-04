@@ -139,6 +139,11 @@ public class View extends Application {
                     else
                         equals.fire();
                     break;
+                case BACK_SPACE:
+                        Controller.getNumbers().clear();
+                        System.out.println(Controller.getNumbers());
+                        getTxt().clear();
+                    break;
                 default:
                     break;
             }
